@@ -147,24 +147,24 @@ ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_report
 			$dname = mysqli_real_escape_string($mysqli,strtolower($_POST['cname']));
 			$d_charge = $_POST['d_charge'];
 			$okey = $_POST['status'];
-			$target_dir = "city/";
-			$temp = explode(".", $_FILES["cimg"]["name"]);
-$newfilename = uniqid().round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
-			
-    
-			
-		move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file);
-				
-
-
-  $table="tbl_city";
-  $field_values=array("title","cimg","status","d_charge");
-  $data_values=array("$dname","$target_file","$okey","$d_charge");
-  
-$h = new Milkman();
-	  $check = $h->Ins_milk_latest($field_values,$data_values,$table);
+			if(trim($dname) == '' || $okey === '' || $d_charge === ''){
+				?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'City Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addcity.php";}, 3000);
+</script>
+<?php 
+			}else{
+		$h = new Milkman();
+$image = $h->upload_image($_FILES["cimg"],'city/','/city');
+	  $check = $h->create_city($dname,$image,$okey,$d_charge);
 if($check == 1)
 {
 ?>
@@ -184,8 +184,7 @@ if($check == 1)
 setTimeout(function(){ window.location.href="addcity.php";}, 3000);
 </script>
 <?php 
-		
-		
+			}
 		}
 		?>
 		
@@ -195,22 +194,26 @@ setTimeout(function(){ window.location.href="addcity.php";}, 3000);
 			$dname = mysqli_real_escape_string($mysqli,strtolower($_POST['cname']));
 			$d_charge = $_POST['d_charge'];
 			$okey = $_POST['status'];
-			$target_dir = "city/";
-			$temp = explode(".", $_FILES["cimg"]["name"]);
-$newfilename = uniqid().round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
+			if(trim($dname) == '' || $okey === '' || $d_charge === ''){
+				?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'City Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addcity.php";}, 3000);
+</script>
+<?php 
+			}else{
 	if($_FILES["cimg"]["name"] != '')
 	{		
-    
-			
-		move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file);
-				 
-$table="tbl_city";
-  $field = array('title'=>$dname,'status'=>$okey,'cimg'=>$target_file,'d_charge'=>$d_charge);
-  $where = "where id=".$_GET['cityid']."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+$image = $h->upload_image($_FILES["cimg"],'city/','/city');
+	  $check = $h->update_city($_GET['cityid'],$dname,$okey,$d_charge,$image);
 	  
 if($check == 1)
 {
@@ -237,11 +240,8 @@ setTimeout(function(){ window.location.href="listcity.php";}, 3000);
 	else 
 	{
 		
-		$table="tbl_city";
-  $field = array('title'=>$dname,'status'=>$okey,'d_charge'=>$d_charge);
-  $where = "where id=".$_GET['cityid']."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_city($_GET['cityid'],$dname,$okey,$d_charge);
 if($check == 1)
 {
 ?>
@@ -262,6 +262,7 @@ setTimeout(function(){ window.location.href="listcity.php";}, 3000);
 </script>
 <?php 
 	}
+			}
 		}
 		?>
     <!-- End js -->

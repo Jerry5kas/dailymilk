@@ -269,33 +269,32 @@ while($row = $cat->fetch_assoc())
 	<?php 
 		if(isset($_POST['updateproduct']))
 		{
-			
-			
 			                $ptitle = $mysqli->real_escape_string($_POST['ptitle']);
 $city = implode(',',$_POST['city']);
-							
 							$ctitle = $mysqli->real_escape_string($_POST['ctitle']);
 							$status = $_POST['status'];
 							$cat = $_POST['cat'];
 							$subcat = $_POST['subcat'];
-							
-							
-			$target_dir = "product/";
-			$temp = explode(".", $_FILES["f_up"]["name"]);
-$newfilename = round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
+if(trim($ptitle) == '' || $status === '' || $cat === '' || $subcat === '' || $city === ''){
+?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Product Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addproduct.php";}, 3000);
+</script>
+<?php 
+}else{
 	if($_FILES["f_up"]["name"] != '')
 	{		
-    
-			
-		 move_uploaded_file($_FILES["f_up"]["tmp_name"], $target_file);
-				 
-$table="tbl_product";
-  $field=array('pimg'=>$target_file,'cityid'=>$city,'catid'=>$cat,'subcatid'=>$subcat,'status'=>$status,'ptitle'=>$ptitle);
-  $where = "where id=".$_GET['productid']."";
 $h = new Milkman();
-	   $check = $h->Ins_milk_updata($field,$table,$where);
+$image = $h->upload_product_image($_FILES["f_up"]);
+$check = $h->update_product($_GET['productid'],$city,$cat,$subcat,$status,$ptitle,$image);
 	  
 if($check == 1)
 {
@@ -322,11 +321,9 @@ setTimeout(function(){ window.location.href="listproduct.php";}, 3000);
 	else 
 	{
 		
-		$table="tbl_product";
-  $field=array('cityid'=>$city,'catid'=>$cat,'subcatid'=>$subcat,'status'=>$status,'ptitle'=>$ptitle);
-  $where = "where id=".$_GET['productid']."";
+		
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_product($_GET['productid'],$city,$cat,$subcat,$status,$ptitle);
 if($check == 1)
 {
 ?>
@@ -348,34 +345,36 @@ setTimeout(function(){ window.location.href="listproduct.php";}, 3000);
 <?php 
 	}
 		}
+}
 		?>
 		
 	<?php 
 	if(isset($_POST['addproduct']))
 	{
 		$ptitle = $mysqli->real_escape_string($_POST['ptitle']);
-							
 							$city = implode(',',$_POST['city']);
 							$ctitle = $mysqli->real_escape_string($_POST['ctitle']);
 							$status = $_POST['status'];
 							$cat = $_POST['cat'];
 							$subcat = $_POST['subcat'];
-							
-							
-			$target_dir = "product/";
-			$temp = explode(".", $_FILES["f_up"]["name"]);
-$newfilename = round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
-			
-		  move_uploaded_file($_FILES["f_up"]["tmp_name"], $target_file);
-		  
-		  $table="tbl_product";
-  $field_values=array("pimg","cityid","catid","subcatid","status","ptitle");
-  $data_values=array("$target_file","$city","$cat","$subcat","$status","$ptitle");
-  
-			$h = new Milkman();
-	  $check = $h->Ins_milk_latest($field_values,$data_values,$table);
+if(trim($ptitle) == '' || $status === '' || $cat === '' || $subcat === '' || $city === ''){
+?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Product Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addproduct.php";}, 3000);
+</script>
+<?php 
+}else{
+$h = new Milkman();
+$image = $h->upload_product_image($_FILES["f_up"]);
+	  $check = $h->create_product($image,$city,$cat,$subcat,$status,$ptitle);
 if($check == 1)
 {
 ?>
@@ -398,6 +397,7 @@ setTimeout(function(){ window.location.href="addproduct.php";}, 3000);
 		
 		
 	}
+}
 	?>
 	
 	<script>

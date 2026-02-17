@@ -155,27 +155,11 @@ while($row = $cat->fetch_assoc())
 	<?php 
 		if(isset($_POST['addbanner']))
 		{
-			
 			$okey = $_POST['status'];
 			$cid = $_POST['cat'];
-			$target_dir = "banner/";
-			$temp = explode(".", $_FILES["cimg"]["name"]);
-$newfilename = uniqid().round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
-			
-   
-			
-		move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file);
-				
-
-
-  $table="tbl_banner";
-  $field_values=array("bimg","status","cid");
-  $data_values=array("$target_file","$okey","$cid");
-  
-$h = new Milkman();
-	  $check = $h->Ins_milk_latest($field_values,$data_values,$table);
+		$h = new Milkman();
+$image = $h->upload_image($_FILES["cimg"],'banner/','/banner');
+	  $check = $h->create_banner($image,$okey,$cid);
 if($check == 1)
 {
 ?>
@@ -205,22 +189,11 @@ setTimeout(function(){ window.location.href="addbanner.php";}, 3000);
 		{
 			$okey = $_POST['status'];
 			$cid = $_POST['cat'];
-			$target_dir = "banner/";
-			$temp = explode(".", $_FILES["cimg"]["name"]);
-$newfilename = uniqid().round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
 	if($_FILES["cimg"]["name"] != '')
 	{		
-    
-			
-		move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file);
-				 
-$table="tbl_banner";
-  $field = array('status'=>$okey,'bimg'=>$target_file,'cid'=>$cid);
-  $where = "where id=".$_GET['bannerid']."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+$image = $h->upload_image($_FILES["cimg"],'banner/','/banner');
+	  $check = $h->update_banner($_GET['bannerid'],$okey,$cid,$image);
 	  
 if($check == 1)
 {
@@ -247,11 +220,8 @@ setTimeout(function(){ window.location.href="listbanner.php";}, 3000);
 	else 
 	{
 		
-		$table="tbl_banner";
-  $field = array('status'=>$okey,'cid'=>$cid);
-  $where = "where id=".$_GET['bannerid']."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_banner($_GET['bannerid'],$okey,$cid);
 if($check == 1)
 {
 ?>

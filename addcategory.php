@@ -135,24 +135,24 @@
 			$dname = mysqli_real_escape_string($mysqli,$_POST['cname']);
 			
 			$okey = $_POST['status'];
-			$target_dir = "category/";
-			$temp = explode(".", $_FILES["cimg"]["name"]);
-$newfilename = uniqid().round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
-			
-    
-			
-		move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file);
-				
-
-
-  $table="tbl_cat";
-  $field_values=array("title","cimg","status");
-  $data_values=array("$dname","$target_file","$okey");
-  
-$h = new Milkman();
-	  $check = $h->Ins_milk_latest($field_values,$data_values,$table);
+if(trim($dname) == '' || $okey === ''){
+?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Category Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addcategory.php";}, 3000);
+</script>
+<?php 
+}else{
+		$h = new Milkman();
+$image = $h->upload_image($_FILES["cimg"],'category/','/category');
+	  $check = $h->create_category($dname,$image,$okey);
 if($check == 1)
 {
 ?>
@@ -175,6 +175,7 @@ setTimeout(function(){ window.location.href="addcategory.php";}, 3000);
 		
 		
 		}
+}
 		?>
 		
 		<?php 
@@ -183,22 +184,26 @@ setTimeout(function(){ window.location.href="addcategory.php";}, 3000);
 			$dname = mysqli_real_escape_string($mysqli,$_POST['cname']);
 			
 			$okey = $_POST['status'];
-			$target_dir = "category/";
-			$temp = explode(".", $_FILES["cimg"]["name"]);
-$newfilename = uniqid().round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
+if(trim($dname) == '' || $okey === ''){
+?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Category Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addcategory.php";}, 3000);
+</script>
+<?php 
+}else{
 	if($_FILES["cimg"]["name"] != '')
 	{		
-   
-			
-		move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file);
-				 
-$table="tbl_cat";
-  $field = array('title'=>$dname,'status'=>$okey,'cimg'=>$target_file);
-  $where = "where id=".$_GET['categoryid']."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+$image = $h->upload_image($_FILES["cimg"],'category/','/category');
+	  $check = $h->update_category($_GET['categoryid'],$dname,$okey,$image);
 	  
 if($check == 1)
 {
@@ -225,11 +230,9 @@ setTimeout(function(){ window.location.href="listcategory.php";}, 3000);
 	else 
 	{
 		
-		$table="tbl_cat";
-  $field = array('title'=>$dname,'status'=>$okey);
-  $where = "where id=".$_GET['categoryid']."";
+		
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_category($_GET['categoryid'],$dname,$okey);
 if($check == 1)
 {
 ?>
@@ -251,6 +254,7 @@ setTimeout(function(){ window.location.href="listcategory.php";}, 3000);
 <?php 
 	}
 		}
+}
 		?>
     <!-- End js -->
 </body>

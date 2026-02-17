@@ -190,25 +190,25 @@
 			$dname = mysqli_real_escape_string($mysqli,$_POST['cname']);
 			$city = $_POST['city'];
 			$product = implode(',',$_POST['product']);
-			 $okey = $_POST['status'];
-			$target_dir = "collection/";
-			$temp = explode(".", $_FILES["cimg"]["name"]);
-$newfilename = uniqid().round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
-			
-   
-			
-		move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file);
-				
-
-
-  $table="tbl_collection";
-  $field_values=array("title","cimg","status","cid","pid");
-  $data_values=array("$dname","$target_file","$okey","$city","$product");
-  
-$h = new Milkman();
-	  $check = $h->Ins_milk_latest($field_values,$data_values,$table);
+			$okey = $_POST['status'];
+			if(trim($dname) == '' || $city === '' || $product === '' || $okey === ''){
+				?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Collection Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addcoll.php";}, 3000);
+</script>
+<?php 
+			}else{
+		$h = new Milkman();
+$image = $h->upload_image($_FILES["cimg"],'collection/','/collection');
+	  $check = $h->create_collection($dname,$image,$okey,$city,$product);
 if($check == 1)
 {
 ?>
@@ -228,8 +228,7 @@ if($check == 1)
 setTimeout(function(){ window.location.href="addcoll.php";}, 3000);
 </script>
 <?php 
-		
-		
+			}
 		}
 		?>
 		
@@ -239,23 +238,27 @@ setTimeout(function(){ window.location.href="addcoll.php";}, 3000);
 			$dname = mysqli_real_escape_string($mysqli,$_POST['cname']);
 			$city = $_POST['city'];
 			$product = implode(',',$_POST['product']);
-			 $okey = $_POST['status'];
-			$target_dir = "collection/";
-			$temp = explode(".", $_FILES["cimg"]["name"]);
-$newfilename = uniqid().round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
+			$okey = $_POST['status'];
+			if(trim($dname) == '' || $city === '' || $product === '' || $okey === ''){
+				?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Collection Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addcoll.php";}, 3000);
+</script>
+<?php 
+			}else{
 	if($_FILES["cimg"]["name"] != '')
 	{		
-   
-			
-		move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file);
-				 
-$table="tbl_collection";
-  $field = array('title'=>$dname,'status'=>$okey,'cimg'=>$target_file,'cid'=>$city,'pid'=>$product);
-  $where = "where id=".$_GET['collectionid']."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+$image = $h->upload_image($_FILES["cimg"],'collection/','/collection');
+	  $check = $h->update_collection($_GET['collectionid'],$dname,$okey,$city,$product,$image);
 	  
 if($check == 1)
 {
@@ -281,11 +284,8 @@ setTimeout(function(){ window.location.href="listcoll.php";}, 3000);
 	else 
 	{
 		
-		$table="tbl_collection";
-  $field = array('title'=>$dname,'status'=>$okey,'cid'=>$city,'pid'=>$product);
-  $where = "where id=".$_GET['collectionid']."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_collection($_GET['collectionid'],$dname,$okey,$city,$product);
 if($check == 1)
 {
 ?>
@@ -306,6 +306,7 @@ setTimeout(function(){ window.location.href="listcoll.php";}, 3000);
 </script>
 <?php 
 	}
+			}
 		}
 		?>
 		

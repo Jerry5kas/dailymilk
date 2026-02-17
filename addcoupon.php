@@ -308,34 +308,31 @@ $(document).ready(function()
 <?php 
 		if(isset($_POST['addcoupon']))
 		{
-			
-			
 			$ccode = $mysqli->real_escape_string($_POST['ccode']);
-							$cdate = $_POST['cdate'];
-							$minamt = $_POST['minamt'];
-							$ctitle = $mysqli->real_escape_string($_POST['ctitle']);
-							$cstatus = $_POST['cstatus'];
-							$cvalue = $_POST['cvalue'];
-							$cdesc = $mysqli->real_escape_string($_POST['cdesc']);
-							
-			$target_dir = "coupon/";
-			$temp = explode(".", $_FILES["f_up"]["name"]);
-$newfilename = round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
-		
-	
-			
-		  move_uploaded_file($_FILES["f_up"]["tmp_name"], $target_file);
-				
-
-
-  $table="tbl_coupon";
-  $field_values=array("c_img","c_desc","c_value","c_title","status","cdate","ctitle","min_amt");
-  $data_values=array("$target_file","$cdesc","$cvalue","$ccode","$cstatus","$cdate","$ctitle","$minamt");
-  
+			$cdate = $_POST['cdate'];
+			$minamt = $_POST['minamt'];
+			$ctitle = $mysqli->real_escape_string($_POST['ctitle']);
+			$cstatus = $_POST['cstatus'];
+			$cvalue = $_POST['cvalue'];
+			$cdesc = $mysqli->real_escape_string($_POST['cdesc']);
+			if(trim($ccode) == '' || trim($ctitle) == '' || $cdate === '' || $cstatus === '' || $minamt === '' || $cvalue === ''){
+				?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Coupon Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addcoupon.php";}, 3000);
+</script>
+<?php 
+			}else{
 $h = new Milkman();
-	  $check = $h->Ins_milk_latest($field_values,$data_values,$table);
+$image = $h->upload_image($_FILES["f_up"],'coupon/','/coupon');
+$check = $h->create_coupon($image,$cdesc,$cvalue,$ccode,$cstatus,$cdate,$ctitle,$minamt);
 if($check == 1)
 {
 ?>
@@ -355,40 +352,40 @@ if($check == 1)
 setTimeout(function(){ window.location.href="addcoupon.php";}, 3000);
 </script>
 <?php 
-		
-		
+			}
 		}
 		?>
 		
 		<?php 
 		if(isset($_POST['updatecoupon']))
 		{
-			
-			
-			                $ccode = $mysqli->real_escape_string($_POST['ccode']);
-							$cdate = $_POST['cdate'];
-							$minamt = $_POST['minamt'];
-							$ctitle = $mysqli->real_escape_string($_POST['ctitle']);
-							$cstatus = $_POST['cstatus'];
-							$cvalue = $_POST['cvalue'];
-							$cdesc = $mysqli->real_escape_string($_POST['cdesc']);
-							
-			$target_dir = "coupon/";
-			$temp = explode(".", $_FILES["f_up"]["name"]);
-$newfilename = round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
+			$ccode = $mysqli->real_escape_string($_POST['ccode']);
+			$cdate = $_POST['cdate'];
+			$minamt = $_POST['minamt'];
+			$ctitle = $mysqli->real_escape_string($_POST['ctitle']);
+			$cstatus = $_POST['cstatus'];
+			$cvalue = $_POST['cvalue'];
+			$cdesc = $mysqli->real_escape_string($_POST['cdesc']);
+			if(trim($ccode) == '' || trim($ctitle) == '' || $cdate === '' || $cstatus === '' || $minamt === '' || $cvalue === ''){
+				?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Coupon Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addcoupon.php";}, 3000);
+</script>
+<?php 
+			}else{
+			$h = new Milkman();
 	if($_FILES["f_up"]["name"] != '')
 	{		
-    
-			
-		 move_uploaded_file($_FILES["f_up"]["tmp_name"], $target_file);
-				 
-$table="tbl_coupon";
-  $field=array('c_img'=>$target_file,'c_desc'=>$cdesc,'c_value'=>$cvalue,'c_title'=>$ccode,'status'=>$cstatus,'cdate'=>$cdate,'ctitle'=>$ctitle,'min_amt'=>$minamt);
-  $where = "where id=".$_GET['couponid']."";
-$h = new Milkman();
-	   $check = $h->Ins_milk_updata($field,$table,$where);
+$image = $h->upload_image($_FILES["f_up"],'coupon/','/coupon');
+$check = $h->update_coupon($_GET['couponid'],$cdesc,$cvalue,$ccode,$cstatus,$cdate,$ctitle,$minamt,$image);
 	  
 if($check == 1)
 {
@@ -415,11 +412,9 @@ setTimeout(function(){ window.location.href="listcoupon.php";}, 3000);
 	else 
 	{
 		
-		$table="tbl_coupon";
-  $field=array('c_desc'=>$cdesc,'c_value'=>$cvalue,'c_title'=>$ccode,'status'=>$cstatus,'cdate'=>$cdate,'ctitle'=>$ctitle,'min_amt'=>$minamt);
-  $where = "where id=".$_GET['couponid']."";
+		
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_coupon($_GET['couponid'],$cdesc,$cvalue,$ccode,$cstatus,$cdate,$ctitle,$minamt);
 if($check == 1)
 {
 ?>
@@ -440,9 +435,10 @@ setTimeout(function(){ window.location.href="listcoupon.php";}, 3000);
 </script>
 <?php 
 	}
+			}
 		}
 		?>
- <!-- End js -->
+	 <!-- End js -->
 </body>
 
 

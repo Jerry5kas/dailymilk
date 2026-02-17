@@ -262,24 +262,39 @@ while($row = $stmt->fetch_assoc())
 	<?php 
 								if(isset($_GET['dsid']))
 								{
-									$status = $_GET['status'];
-									
+									$dsid = $_GET['dsid'];
+									$status = isset($_GET['status']) ? $_GET['status'] : '';
+									if($dsid === '' || !is_numeric($dsid) || $status === '' || ($status != 1 && $status != 2)){
+										?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+ <script>
+ iziToast.error({
+    title: 'Decision Section!!',
+    message: 'Invalid request parameters!!',
+    position: 'topRight'
+  });
+  </script>
+<script>
+setTimeout(function(){ window.location.href="sporder.php";}, 3000);
+</script>
+<?php 
+									}else{
 									if($status == 1)
 									{
 									 
 									 $table="tbl_subscribe_order";
   $field = array('a_status'=>$status);
-  $where = "where id=".$_GET['dsid']."";
+  $where = "where id=".$dsid."";
   
 $h = new Milkman();
 	  $check = $h->Ins_milk_updata($field,$table,$where);
 	  
-	  $checks = $mysqli->query("select * from tbl_subscribe_order where id=".$_GET['dsid']."")->fetch_assoc(); 
+	  $checks = $mysqli->query("select * from tbl_subscribe_order where id=".$dsid."")->fetch_assoc(); 
 	  $uid = $checks['uid'];
 			$udata = $mysqli->query("select * from tbl_user where id=".$checks['uid']."")->fetch_assoc();
 $name = $udata['name'];
 
-	  $oid = $_GET['dsid'];
+	  $oid = $dsid;
 	  $timestamp = date("Y-m-d H:i:s");
 
 $title_main = "Subscribe Order Confirmed!!";
@@ -294,7 +309,7 @@ $table="tbl_notification";
 	   
 	   
 $content = array(
-       "en" => $name.', Your Order #'.$_GET['dsid'].' Has Been Confirmed.'
+       "en" => $name.', Your Order #'.$oid.' Has Been Confirmed.'
    );
 $heading = array(
    "en" => "Subscribe Order Confirmed!!"
@@ -303,7 +318,7 @@ $heading = array(
 $fields = array(
 'app_id' => $set['one_key'],
 'included_segments' =>  array("Active Users"),
-'data' => array("order_id" =>$_GET['dsid']),
+'data' => array("order_id" =>$oid),
 'filters' => array(array('field' => 'tag', 'key' => 'userid', 'relation' => '=', 'value' => $checks['uid'])),
 'contents' => $content,
 'headings' => $heading,
@@ -350,7 +365,7 @@ if($check == 1)
 										 
 										 $table="tbl_subscribe_order";
   $field = array('a_status'=>$status,'status'=>'Cancelled');
-  $where = "where id=".$_GET['dsid']."";
+  $where = "where id=".$dsid."";
 $h = new Milkman();
 	  $check = $h->Ins_milk_updata($field,$table,$where);
 	  
@@ -370,6 +385,7 @@ if($check == 1)
 }
 
 
+									}
 									}
 									?>
 									<script>

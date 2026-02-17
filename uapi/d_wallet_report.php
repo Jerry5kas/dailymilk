@@ -3,15 +3,21 @@ require dirname( dirname(__FILE__) ).'/include/milkprams.php';
 
 header('Content-type: text/json');
 $data = json_decode(file_get_contents('php://input'), true);
-if($data['uid'] == '')
+if(!is_array($data))
 {
     
     $returnArr = array("ResponseCode"=>"401","Result"=>"false","ResponseMsg"=>"Something Went Wrong!");
 }
 else
 {
-    
-$uid =  strip_tags(mysqli_real_escape_string($mysqli,$data['uid']));
+    $uid = isset($data['uid']) ? trim($data['uid']) : '';
+if($uid == '' or !is_numeric($uid))
+{
+    $returnArr = array("ResponseCode"=>"401","Result"=>"false","ResponseMsg"=>"Something Went Wrong!");
+}
+else
+{
+$uid =  strip_tags(mysqli_real_escape_string($mysqli,$uid));
 $checkimei = mysqli_num_rows(mysqli_query($mysqli,"select * from tbl_user where  `id`=".$uid.""));
 
 if($checkimei != 0)
@@ -41,7 +47,6 @@ while($row = $sel->fetch_assoc())
     {
       $returnArr = array("ResponseCode"=>"401","Result"=>"false","ResponseMsg"=>"Request To Update Own Device!!!!");  
     }
-    
 }
-
+}
 echo json_encode($returnArr);

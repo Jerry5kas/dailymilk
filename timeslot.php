@@ -148,6 +148,21 @@
 			$mintime = mysqli_real_escape_string($mysqli,$_POST['mintime']);
 							
 							$maxtime = mysqli_real_escape_string($mysqli,$_POST['maxtime']);
+			if($mintime === '' || $maxtime === ''){
+				?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+ <script>
+ iziToast.error({
+    title: 'Timeslot Section!!',
+    message: 'Please fill all required fields!!',
+    position: 'topRight'
+  });
+  </script>
+<script>
+setTimeout(function(){ window.location.href="timeslot.php";}, 3000);
+</script>
+<?php 
+			}else{
 
   $table="timeslot";
   $field_values=array("mintime","maxtime");
@@ -174,8 +189,7 @@ if($check == 1)
 setTimeout(function(){ window.location.href="timeslot.php";}, 3000);
 </script>
 <?php 
-		
-		
+			}
 		}
 		?>
 		
@@ -185,9 +199,21 @@ setTimeout(function(){ window.location.href="timeslot.php";}, 3000);
 			$mintime = mysqli_real_escape_string($mysqli,$_POST['mintime']);
 							
 							$maxtime = mysqli_real_escape_string($mysqli,$_POST['maxtime']);
-		
-	
-	
+			if($mintime === '' || $maxtime === ''){
+				?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+ <script>
+ iziToast.error({
+    title: 'Timeslot Section!!',
+    message: 'Please fill all required fields!!',
+    position: 'topRight'
+  });
+  </script>
+<script>
+setTimeout(function(){ window.location.href="timeslot.php?timeid=<?php echo $_GET['timeid'];?>";}, 3000);
+</script>
+<?php 
+			}else{
 		
 		$table="timeslot";
   $field = array('mintime'=>$mintime,'maxtime'=>$maxtime);
@@ -213,7 +239,7 @@ if($check == 1)
 setTimeout(function(){ window.location.href="listtime.php";}, 3000);
 </script>
 <?php 
-	
+			}
 		}
 		?>
     <!-- End js -->

@@ -141,22 +141,26 @@ $('#p_attr').tagsinput('items');
 			$ptitle = mysqli_real_escape_string($mysqli,$_POST['ptitle']);
 			$okey = $_POST['status'];
 			$p_show = $_POST['p_show'];
-			$target_dir = "payment/";
-			$temp = explode(".", $_FILES["cat_img"]["name"]);
-$newfilename = round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
+if(trim($dname) == '' || trim($ptitle) == '' || $okey === '' || $p_show === ''){
+?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Payment Gateway Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="paymentlist.php";}, 3000);
+</script>
+<?php 
+}else{
 	if($_FILES["cat_img"]["name"] != '')
 	{		
-    
-			
-		 move_uploaded_file($_FILES["cat_img"]["tmp_name"], $target_file);
-				 
-$table="tbl_payment_list";
-  $field = array('title'=>$dname,'status'=>$okey,'img'=>$target_file,'attributes'=>$attributes,'subtitle'=>$ptitle,'p_show'=>$p_show);
-  $where = "where id=".$_GET['paymentid']."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+$image = $h->upload_image($_FILES["cat_img"],'payment/','/payment');
+$check = $h->update_payment($_GET['paymentid'],$dname,$ptitle,$attributes,$okey,$p_show,$image);
 	  
 if($check == 1)
 {
@@ -183,11 +187,9 @@ setTimeout(function(){ window.location.href="paymentlist.php";}, 3000);
 	else 
 	{
 		
-		$table="tbl_payment_list";
-  $field = array('title'=>$dname,'status'=>$okey,'attributes'=>$attributes,'subtitle'=>$ptitle,'p_show'=>$p_show);
-  $where = "where id=".$_GET['paymentid']."";
+		
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_payment($_GET['paymentid'],$dname,$ptitle,$attributes,$okey,$p_show);
 if($check == 1)
 {
 ?>
@@ -209,6 +211,7 @@ setTimeout(function(){ window.location.href="paymentlist.php";}, 3000);
 <?php 
 	}
 		}
+}
 		?>
     <!-- End js -->
 </body>

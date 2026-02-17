@@ -329,7 +329,6 @@
 			$id = 1;
 			if($_FILES["llogo"]["name"] == '' and $_FILES["pdbanner"]["name"] == '')
 			{
-				$table="setting";
   $field = array('asid'=>$asid,'megic_Num'=>$megic_Num,'token'=>$token,'signupcredit'=>$signupcredit,'refercredit'=>$refercredit,'d_title'=>$dname,'one_key'=>$okey,'one_hash'=>$ohash,'r_key'=>$r_key,'r_hash'=>$r_hash,'currency'=>$currency,'policy'=>$policy,'about'=>$about,'contact'=>$contact,'terms'=>$terms,'timezone'=>$timezone,'p_limit'=>$p_limit,
 					'otp_auth'=>$otp_auth,
 					'twilio_number'=>$twilio_number,
@@ -338,9 +337,8 @@
 					'otp_id'=>$otp_id,
 					'auth_key'=>$auth_key,
 					'sms_type'=>$sms_type);
-  $where = "where id=".$id."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_setting($field,$id);
 	  
 if($check == 1)
 {
@@ -379,15 +377,9 @@ setTimeout(function(){ window.location.href="setting.php";}, 3000);
 			}
 			else if($_FILES["llogo"]["name"] == '' and $_FILES["pdbanner"]["name"] != '')
 			{
-				
-				$target_dir = "setting/";
-$target_file = $target_dir . basename($_FILES["pdbanner"]["name"]);
-			
-			$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-   
-				
-				$table="setting";
-  $field = array('asid'=>$asid,'megic_Num'=>$megic_Num,'token'=>$token,'signupcredit'=>$signupcredit,'refercredit'=>$refercredit,'d_title'=>$dname,'one_key'=>$okey,'one_hash'=>$ohash,'r_key'=>$r_key,'r_hash'=>$r_hash,'currency'=>$currency,'pdbanner'=>$target_file,'policy'=>$policy,'about'=>$about,'contact'=>$contact,'terms'=>$terms,'timezone'=>$timezone,'p_limit'=>$p_limit,
+				$h = new Milkman();
+$pdbanner = $h->upload_image($_FILES["pdbanner"],'setting/','/setting');
+  $field = array('asid'=>$asid,'megic_Num'=>$megic_Num,'token'=>$token,'signupcredit'=>$signupcredit,'refercredit'=>$refercredit,'d_title'=>$dname,'one_key'=>$okey,'one_hash'=>$ohash,'r_key'=>$r_key,'r_hash'=>$r_hash,'currency'=>$currency,'pdbanner'=>$pdbanner,'policy'=>$policy,'about'=>$about,'contact'=>$contact,'terms'=>$terms,'timezone'=>$timezone,'p_limit'=>$p_limit,
 					'otp_auth'=>$otp_auth,
 					'twilio_number'=>$twilio_number,
 					'auth_token'=>$auth_token,
@@ -395,9 +387,8 @@ $target_file = $target_dir . basename($_FILES["pdbanner"]["name"]);
 					'otp_id'=>$otp_id,
 					'auth_key'=>$auth_key,
 					'sms_type'=>$sms_type);
-  $where = "where id=".$id."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_setting($field,$id);
 	  
 if($check == 1)
 {
@@ -437,14 +428,9 @@ setTimeout(function(){ window.location.href="setting.php";}, 3000);
 			}
 			else if($_FILES["llogo"]["name"] != '' and $_FILES["pdbanner"]["name"] == '')
 			{
-				$target_dir = "setting/";
-$target_file = $target_dir . basename($_FILES["llogo"]["name"]);
-			
-			$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-   
-				
-				$table="setting";
-  $field = array('asid'=>$asid,'megic_Num'=>$megic_Num,'token'=>$token,'signupcredit'=>$signupcredit,'refercredit'=>$refercredit,'d_title'=>$dname,'one_key'=>$okey,'one_hash'=>$ohash,'r_key'=>$r_key,'r_hash'=>$r_hash,'currency'=>$currency,'logo'=>$target_file,'policy'=>$policy,'about'=>$about,'contact'=>$contact,'terms'=>$terms,'timezone'=>$timezone,'p_limit'=>$p_limit,
+				$h = new Milkman();
+$logo = $h->upload_image($_FILES["llogo"],'setting/','/setting');
+  $field = array('asid'=>$asid,'megic_Num'=>$megic_Num,'token'=>$token,'signupcredit'=>$signupcredit,'refercredit'=>$refercredit,'d_title'=>$dname,'one_key'=>$okey,'one_hash'=>$ohash,'r_key'=>$r_key,'r_hash'=>$r_hash,'currency'=>$currency,'logo'=>$logo,'policy'=>$policy,'about'=>$about,'contact'=>$contact,'terms'=>$terms,'timezone'=>$timezone,'p_limit'=>$p_limit,
 					'otp_auth'=>$otp_auth,
 					'twilio_number'=>$twilio_number,
 					'auth_token'=>$auth_token,
@@ -452,9 +438,8 @@ $target_file = $target_dir . basename($_FILES["llogo"]["name"]);
 					'otp_id'=>$otp_id,
 					'auth_key'=>$auth_key,
 					'sms_type'=>$sms_type);
-  $where = "where id=".$id."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_setting($field,$id);
 	  
 if($check == 1)
 {
@@ -496,21 +481,10 @@ setTimeout(function(){ window.location.href="setting.php";}, 3000);
 		}
 		else 
 		{
-		$target_dir = "setting/";
-$target_file = $target_dir . basename($_FILES["llogo"]["name"]);
-			
-			$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-   
-			
-				
-				$target_files = $target_dir . basename($_FILES["pdbanner"]["name"]);
-			
-			$imageFileType = strtolower(pathinfo($target_files,PATHINFO_EXTENSION));
-   
-				
-				
-				$table="setting";
-  $field = array('asid'=>$asid,'megic_Num'=>$megic_Num,'token'=>$token,'signupcredit'=>$signupcredit,'refercredit'=>$refercredit,'d_title'=>$dname,'one_key'=>$okey,'one_hash'=>$ohash,'r_key'=>$r_key,'r_hash'=>$r_hash,'currency'=>$currency,'logo'=>$target_file,'pdbanner'=>$target_files,'policy'=>$policy,'about'=>$about,'contact'=>$contact,'terms'=>$terms,'timezone'=>$timezone,'p_limit'=>$p_limit,
+		$h = new Milkman();
+$logo = $h->upload_image($_FILES["llogo"],'setting/','/setting');
+$pdbanner = $h->upload_image($_FILES["pdbanner"],'setting/','/setting');
+  $field = array('asid'=>$asid,'megic_Num'=>$megic_Num,'token'=>$token,'signupcredit'=>$signupcredit,'refercredit'=>$refercredit,'d_title'=>$dname,'one_key'=>$okey,'one_hash'=>$ohash,'r_key'=>$r_key,'r_hash'=>$r_hash,'currency'=>$currency,'logo'=>$logo,'pdbanner'=>$pdbanner,'policy'=>$policy,'about'=>$about,'contact'=>$contact,'terms'=>$terms,'timezone'=>$timezone,'p_limit'=>$p_limit,
 					'otp_auth'=>$otp_auth,
 					'twilio_number'=>$twilio_number,
 					'auth_token'=>$auth_token,
@@ -518,10 +492,8 @@ $target_file = $target_dir . basename($_FILES["llogo"]["name"]);
 					'otp_id'=>$otp_id,
 					'auth_key'=>$auth_key,
 					'sms_type'=>$sms_type);
-  $where = "where id=".$id."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
-	  
+	  $check = $h->update_setting($field,$id);
 if($check == 1)
 {
 ?>
@@ -555,10 +527,11 @@ else
 <script>
 setTimeout(function(){ window.location.href="setting.php";}, 3000);
 </script>
-<?php	
-		}
-		}
-		?>
+ 
+<?php
+        }
+        }
+        ?>
     <!-- End js -->
 	<script type="text/javascript">
 

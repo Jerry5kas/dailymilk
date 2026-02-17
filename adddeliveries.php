@@ -138,6 +138,21 @@
 			$dname = mysqli_real_escape_string($mysqli,$_POST['cname']);
 			$ddigit = $_POST['ddigit'];
 			$okey = $_POST['status'];
+			if(trim($dname) == '' || $ddigit === '' || $okey === ''){
+				?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+ <script>
+ iziToast.error({
+    title: 'Deliveries Section!!',
+    message: 'Please fill all required fields!!',
+    position: 'topRight'
+  });
+  </script>
+<script>
+setTimeout(function(){ window.location.href="adddeliveries.php?deliveryid=<?php echo $_GET['deliveryid'];?>";}, 3000);
+</script>
+<?php 
+			}else{
 			
 			$table="tbl_delivery";
   $field = array('title'=>$dname,'de_digit'=>$ddigit,'status'=>$okey);
@@ -164,7 +179,7 @@ $h = new Milkman();
 setTimeout(function(){ window.location.href="listdeliveries.php";}, 3000);
 </script>
 <?php 
-		
+			}
 		}
 		?>
 			
@@ -174,9 +189,21 @@ setTimeout(function(){ window.location.href="listdeliveries.php";}, 3000);
 			$dname = mysqli_real_escape_string($mysqli,$_POST['cname']);
 			$ddigit = $_POST['ddigit'];
 			$okey = $_POST['status'];
-			
-		
-
+			if(trim($dname) == '' || $ddigit === '' || $okey === ''){
+				?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+ <script>
+ iziToast.error({
+    title: 'Deliveries Section!!',
+    message: 'Please fill all required fields!!',
+    position: 'topRight'
+  });
+  </script>
+<script>
+setTimeout(function(){ window.location.href="adddeliveries.php";}, 3000);
+</script>
+<?php 
+			}else{
 
   $table="tbl_delivery";
   $field_values=array("title","de_digit","status");
@@ -203,8 +230,7 @@ if($check == 1)
 setTimeout(function(){ window.location.href="adddeliveries.php";}, 3000);
 </script>
 <?php 
-		
-		
+			}
 		}
 		?>
     <!-- End js -->

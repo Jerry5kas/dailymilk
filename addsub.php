@@ -169,24 +169,24 @@ while($row = $cat->fetch_assoc())
 			$dname = mysqli_real_escape_string($mysqli,$_POST['cname']);
 			$cid = $_POST['cat'];
 			$okey = $_POST['status'];
-			$target_dir = "subcategory/";
-			$temp = explode(".", $_FILES["cimg"]["name"]);
-$newfilename = uniqid().round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
-			
-   
-			
-		move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file);
-				
-
-
-  $table="tbl_subcat";
-  $field_values=array("cid","title","cimg","status");
-  $data_values=array("$cid","$dname","$target_file","$okey");
-  
+if(trim($dname) == '' || $cid === '' || $okey === ''){
+?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Subcategory Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addsub.php";}, 3000);
+</script>
+<?php 
+}else{
 $h = new Milkman();
-	  $check = $h->Ins_milk_latest($field_values,$data_values,$table);
+$image = $h->upload_image($_FILES["cimg"],'subcategory/','/subcategory');
+	  $check = $h->create_subcategory($cid,$dname,$image,$okey);
 if($check == 1)
 {
 ?>
@@ -209,7 +209,8 @@ setTimeout(function(){ window.location.href="addsub.php";}, 3000);
 		
 		
 		}
-		?>
+}
+?>
 		
 		<?php 
 		if(isset($_POST['updatesub']))
@@ -217,22 +218,26 @@ setTimeout(function(){ window.location.href="addsub.php";}, 3000);
 			$dname = mysqli_real_escape_string($mysqli,$_POST['cname']);
 			$cid = $_POST['cat'];
 			$okey = $_POST['status'];
-			$target_dir = "subcategory/";
-			$temp = explode(".", $_FILES["cimg"]["name"]);
-$newfilename = uniqid().round(microtime(true)) . '.' . end($temp);
-$target_file = $target_dir . basename($newfilename);
-			
+if(trim($dname) == '' || $cid === '' || $okey === ''){
+?>
+<script src="assets/izitoast/js/iziToast.min.js"></script>
+<script>
+iziToast.error({
+title: 'Subcategory Section!!',
+message: 'Please fill all required fields!!',
+position: 'topRight'
+});
+</script>
+<script>
+setTimeout(function(){ window.location.href="addsub.php";}, 3000);
+</script>
+<?php 
+}else{
 	if($_FILES["cimg"]["name"] != '')
 	{		
-   
-			
-		move_uploaded_file($_FILES["cimg"]["tmp_name"], $target_file);
-				 
-$table="tbl_subcat";
-  $field = array('title'=>$dname,'status'=>$okey,'cimg'=>$target_file,'cid'=>$cid);
-  $where = "where id=".$_GET['subcategoryid']."";
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+$image = $h->upload_image($_FILES["cimg"],'subcategory/','/subcategory');
+	  $check = $h->update_subcategory($_GET['subcategoryid'],$cid,$dname,$okey,$image);
 	  
 if($check == 1)
 {
@@ -259,11 +264,9 @@ setTimeout(function(){ window.location.href="listsub.php";}, 3000);
 	else 
 	{
 		
-		$table="tbl_subcat";
-  $field = array('title'=>$dname,'status'=>$okey,'cid'=>$cid);
-  $where = "where id=".$_GET['subcategoryid']."";
+		
 $h = new Milkman();
-	  $check = $h->Ins_milk_updata($field,$table,$where);
+	  $check = $h->update_subcategory($_GET['subcategoryid'],$cid,$dname,$okey);
 if($check == 1)
 {
 ?>
@@ -285,6 +288,7 @@ setTimeout(function(){ window.location.href="listsub.php";}, 3000);
 <?php 
 	}
 		}
+}
 		?>
     <!-- End js -->
 </body>
