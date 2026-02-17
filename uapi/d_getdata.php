@@ -1,5 +1,6 @@
  <?php 
 require dirname( dirname(__FILE__) ).'/include/milkprams.php';
+require dirname( dirname(__FILE__) ).'/app/Services/UserService.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
  
@@ -10,12 +11,10 @@ if($uid == '')
 }
 else 
 { 
-$count = $mysqli->query("select * from tbl_user where id=".$uid."")->num_rows;
-if($count != 0)
+$walletData = \App\Services\UserService::getWalletData($mysqli, $uid);
+if($walletData !== null)
 {
-$wallet = $mysqli->query("select * from tbl_user where id=".$uid."")->fetch_assoc();
-$curr = $mysqli->query("select signupcredit,refercredit from setting")->fetch_assoc();
-$returnArr = array("ResponseCode"=>"200","Result"=>"true","ResponseMsg"=>"Wallet Balance Get Successfully!","code"=>$wallet['code'],"signupcredit"=>$curr['signupcredit'],"refercredit"=>$curr['refercredit']);
+    $returnArr = array("ResponseCode"=>"200","Result"=>"true","ResponseMsg"=>"Wallet Balance Get Successfully!","code"=>$walletData['code'],"signupcredit"=>$walletData['signupcredit'],"refercredit"=>$walletData['refercredit']);
 }
 else 
 {

@@ -2,7 +2,7 @@
 require dirname( dirname(__FILE__) ).'/include/milkprams.php';
 require dirname( dirname(__FILE__) ).'/include/Milkman.php';
 $data = json_decode(file_get_contents('php://input'), true);
-ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
+ini_set('display_errors', 0); ini_set('display_startup_errors', 0); error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 if($data['uid'] == '' or $data['address'] == '' or $data['name'] == '' or $data['mobile'] == '' or $data['pincode'] == '' or $data['houseno']==''  or $data['landmark'] == '' or $data['type'] == '' or $data['lat_map'] == '' or $data['long_map'] == '' or $data['aid'] == '')
 {
     $returnArr = array("ResponseCode"=>"401","Result"=>"false","ResponseMsg"=>"Something Went Wrong!");

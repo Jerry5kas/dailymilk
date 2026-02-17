@@ -93,10 +93,10 @@ Goal: better security, no change for valid users.
 
 Goal: safe errors in UI, detailed errors in logs.
 
-- [ ] Replace raw `die()` / plain error echoes in admin
-- [ ] Replace raw `die()` / plain error echoes in APIs
-- [ ] Log internal errors with `error_log()` instead of exposing details
-- [ ] Keep existing redirects and visible messages the same
+- [x] Replace raw `die()` / plain error echoes in admin
+- [x] Replace raw `die()` / plain error echoes in APIs
+- [x] Log internal errors with `error_log()` instead of exposing details
+- [x] Keep existing redirects and visible messages the same
 
 ---
 
@@ -104,9 +104,14 @@ Goal: safe errors in UI, detailed errors in logs.
 
 Goal: introduce services and thin controllers, keep all workflows.
 
-- [ ] Create simple `app/` or `src/` folder
-- [ ] Add `app/Services/OrderService.php`
-- [ ] Add `app/Services/UserService.php`
-- [ ] Move logic from `uapi/*.php` into services (incremental)
-- [ ] Move logic from `rapi/*.php` into services (incremental)
-- [ ] Keep all existing URLs, forms, and response formats unchanged
+- [x] Create simple `app/` or `src/` folder
+- [x] Add `app/Services/OrderService.php`
+- [x] Add `app/Services/UserService.php`
+- [x] Move logic from `uapi/*.php` into services (incremental)
+- [x] Move logic from `rapi/*.php` into services (incremental)
+- [x] Keep all existing URLs, forms, and response formats unchanged
+
+Pending for later passes (do not change yet, just notes):
+
+- [ ] Review remaining `uapi/*.php` that still contain inline business logic
+- [ ] Review remaining `rapi/*.php` that still contain inline business logic

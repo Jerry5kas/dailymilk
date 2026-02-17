@@ -3,7 +3,7 @@ require dirname( dirname(__FILE__) ).'/include/milkprams.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 header('Content-type: text/json');
-ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
+ini_set('display_errors', 0); ini_set('display_startup_errors', 0); error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 if($data['uid'] == '' or $data['order_id'] == '')
 {
  $returnArr = array("ResponseCode"=>"401","Result"=>"false","ResponseMsg"=>"Something Went Wrong!");    
